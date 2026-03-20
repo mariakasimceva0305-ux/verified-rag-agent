@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import time
 
 from src.config import load_config
@@ -14,7 +15,15 @@ def _mrr_from_rank(rank: int | None) -> float:
 
 
 def main() -> None:
-    cfg = load_config("configs/app.yaml")
+    parser = argparse.ArgumentParser(description="Run offline retrieval evaluation.")
+    parser.add_argument(
+        "--config",
+        default="configs/app.yaml",
+        help="Path to YAML config file.",
+    )
+    args = parser.parse_args()
+
+    cfg = load_config(args.config)
     pipeline = RAGPipeline(cfg)
     questions = read_jsonl("eval/questions.jsonl")
     if not questions:

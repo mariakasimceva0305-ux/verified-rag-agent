@@ -1,0 +1,17 @@
+data_raw_dir: data/raw
+data_processed_dir: data/processed
+documents_path: data/processed/documents.baseline.jsonl
+chunks_path: data/processed/chunks.baseline.jsonl
+index_path: data/processed/index.baseline.faiss
+
+embedding_model_name: sentence-transformers/all-MiniLM-L6-v2
+top_k: 5
+chunk_size: 600
+chunk_overlap: 120
+
+use_query_rewrite: false
+use_reranker: false
+use_verifier: false
+
+generator_mode: extractive
+

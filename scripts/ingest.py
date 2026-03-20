@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import argparse
+
 from src.chunking import chunk_documents
 from src.config import load_config
 from src.ingest import ingest_raw_documents, save_documents
@@ -7,7 +9,15 @@ from src.retriever import save_chunks
 
 
 def main() -> None:
-    cfg = load_config("configs/app.yaml")
+    parser = argparse.ArgumentParser(description="Ingest raw documents and create chunks.")
+    parser.add_argument(
+        "--config",
+        default="configs/app.yaml",
+        help="Path to YAML config file.",
+    )
+    args = parser.parse_args()
+
+    cfg = load_config(args.config)
     docs = ingest_raw_documents(cfg.data_raw_dir)
     save_documents(docs, cfg.documents_path)
 

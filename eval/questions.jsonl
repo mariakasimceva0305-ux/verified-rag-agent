@@ -1,4 +1,17 @@
-{"question":"What is the policy for password resets?","gold_doc_ids":[]}
-{"question":"When should a ticket be escalated?","gold_doc_ids":[]}
-{"question":"How long are audit logs retained?","gold_doc_ids":[]}
+{"question":"How long are security audit logs retained?","gold_doc_ids":["doc_1fadeaa7da59"]}
+{"question":"What is the retention period for access logs?","gold_doc_ids":["doc_1fadeaa7da59"]}
+{"question":"When must a support ticket be escalated?","gold_doc_ids":["doc_227cc417c383"]}
+{"question":"What information must be included during escalation?","gold_doc_ids":["doc_227cc417c383"]}
+{"question":"What are the SEV-1 and SEV-2 response targets?","gold_doc_ids":["doc_379a9be01e8b"]}
+{"question":"Who handles SEV-1 incidents outside business hours?","gold_doc_ids":["doc_379a9be01e8b"]}
+{"question":"When is MFA mandatory?","gold_doc_ids":["doc_9a32a27f0926"]}
+{"question":"Which second factors are allowed for MFA?","gold_doc_ids":["doc_9a32a27f0926"]}
+{"question":"How quickly must high-risk role access be revoked after termination?","gold_doc_ids":["doc_4c1cae42b7b9"]}
+{"question":"Which systems are revoked in the access revocation workflow?","gold_doc_ids":["doc_4c1cae42b7b9"]}
+{"question":"What are the main steps in the offboarding checklist?","gold_doc_ids":["doc_cad8dadd61ac"]}
+{"question":"Who owns completion of offboarding tasks?","gold_doc_ids":["doc_cad8dadd61ac"]}
+{"question":"How are new employees granted access during onboarding?","gold_doc_ids":["doc_1d26fcf26206"]}
+{"question":"Does onboarding allow shared accounts?","gold_doc_ids":["doc_1d26fcf26206"]}
+{"question":"Under what conditions can an account be suspended?","gold_doc_ids":["doc_99f968a2ebc1"]}
+{"question":"When can a suspended account be restored?","gold_doc_ids":["doc_99f968a2ebc1"]}
 

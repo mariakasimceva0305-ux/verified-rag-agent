@@ -1,81 +1,97 @@
-# Verified RAG Agent for Document QA
+# Verified RAG Agent
 
-A citation-aware RAG project for question answering over a document corpus, built as a clean engineering baseline with an extensible improved pipeline.
+Небольшой инженерный проект по RAG: система отвечает на вопросы по внутреннему набору документов, показывает цитаты и позволяет сравнить базовый и улучшенный режимы пайплайна.
 
-## What this project does
+## Краткий обзор
 
-- Ingests local documents (`.txt` / `.md`) into a normalized corpus.
-- Splits documents into overlapping chunks.
-- Builds a FAISS vector index over sentence-transformer embeddings.
-- Retrieves top-k relevant chunks for a question.
-- Optionally rewrites queries, reranks candidates, and verifies groundedness.
-- Returns answers with explicit source citations.
+- Проект ориентирован на понятный `v1` без лишней сложности.
+- Основной фокус: retrieval, цитирование источников, простая проверка groundedness.
+- В репозитории есть встроенный demo-корпус и готовые профили `baseline` / `improved`.
 
-## Why this exists
+## Что делает проект
 
-The goal is to provide a realistic, interview-friendly NLP/retrieval project:
+Система:
 
-- simple enough to understand quickly,
-- modular enough to extend,
-- rigorous enough to evaluate baseline vs improved retrieval behavior.
+- читает документы из локального корпуса,
+- разбивает их на чанки,
+- строит векторный индекс (FAISS + sentence-transformers),
+- находит релевантные чанки по вопросу,
+- формирует ответ с цитатами,
+- опционально применяет rewrite, rerank и verification.
 
-## Pipeline
+## Зачем проект сделан
 
-1. **Ingestion**: read raw docs from `data/raw/`.
-2. **Chunking**: split text into overlapping windows.
-3. **Indexing**: embed chunks and store FAISS index + metadata.
-4. **Retrieval**: retrieve top-k chunks by vector similarity.
-5. **(Optional) Rewrite**: improve query phrasing before retrieval.
-6. **(Optional) Rerank**: reorder retrieved candidates.
-7. **Generation**: produce answer text with citations.
-8. **(Optional) Verification**: estimate whether answer is grounded in evidence.
+Цель — показать практичную реализацию retrieval/RAG-задачи, которую легко объяснить на интервью:
+
+- есть четкий pipeline,
+- есть сравнение режимов,
+- есть воспроизводимый запуск и локальная оценка.
+
+Это не research-репликация и не production-платформа.
+
+## Pipeline (шаг за шагом)
+
+1. **Ingest**: загрузка `.md`/`.txt` документов из `data/raw/`.
+2. **Chunking**: разбиение текста на перекрывающиеся чанки.
+3. **Indexing**: эмбеддинги чанков + сохранение FAISS индекса.
+4. **Retrieval**: поиск top-k релевантных чанков.
+5. **Query rewrite (опционально)**: простая нормализация запроса.
+6. **Rerank (опционально)**: легкая переупорядочивающая логика.
+7. **Generation**: сбор ответа на основе найденных фрагментов.
+8. **Verification (опционально)**: простая оценка groundedness по пересечению лексики.
 
 ## Baseline vs Improved
 
-### Baseline (implemented)
-- vector retrieval
-- top-k chunk selection
-- extractive answer synthesis
-- citations
+### Baseline (`configs/baseline.yaml`)
 
-### Improved pipeline (scaffolded, lightweight placeholders in v1)
-- query rewriting (`src/rewriter.py`)
-- reranking (`src/reranker.py`)
-- verification (`src/verifier.py`)
+- `use_query_rewrite: false`
+- `use_reranker: false`
+- `use_verifier: false`
 
-## Data / Corpus
+Назначение: минимальный рабочий RAG-режим с retrieval + answer + citations.
 
-The repository is initialized for a local document corpus:
+### Improved (`configs/improved.yaml`)
 
-- Place source docs in `data/raw/`.
-- Supported formats in v1: `.txt`, `.md`.
-- Processed artifacts are written to `data/processed/`.
+- `use_query_rewrite: true`
+- `use_reranker: true`
+- `use_verifier: true`
 
-## Evaluation plan
+Назначение: сравнимый с baseline режим с дополнительными легкими шагами.
 
-Evaluation entrypoint: `scripts/run_eval.py`
+Важно: в `v1` rewriter/reranker/verifier остаются намеренно простыми.
 
-- **Retrieval metrics**: HitRate@k, MRR (from `gold_doc_ids` in eval set)
-- **System metrics**: latency p50 / p95
-- **Answer review**: manual correctness / groundedness / citation usefulness (planned in `eval/`)
+## Demo-корпус
 
-No fake benchmark numbers are included; results are generated only from local runs.
+В репозитории уже включен набор документов:
 
-## Repository layout
+- путь: `data/raw/demo_corpus/`
+- тема: support / security / access policies
+- объем: 10 кратких и согласованных документов
+
+Примеры:
+
+- `password-reset-policy.md`
+- `escalation-policy.md`
+- `audit-log-retention.md`
+- `access-revocation.md`
+
+## Структура репозитория
 
 ```text
-configs/            # YAML config
-data/raw/           # input corpus
-data/processed/     # generated documents/chunks/index
-docs/               # project notes
-eval/               # eval dataset and outputs
-examples/           # sample questions
-scripts/            # ingest/index/eval scripts
-src/                # pipeline modules
-tests/              # lightweight unit tests
+configs/            # профили запуска и настройки
+data/raw/           # исходные документы (включая demo_corpus)
+data/processed/     # артефакты ingest/chunk/index
+docs/               # рабочие заметки
+eval/               # eval-набор и результаты
+examples/           # примеры вопросов
+scripts/            # CLI-скрипты
+src/                # модули пайплайна
+tests/              # минимальные тесты
 ```
 
-## How to run
+## Как запустить
+
+### 1) Установка
 
 ```bash
 python -m venv .venv
@@ -83,35 +99,73 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-Add a few `.txt` or `.md` files into `data/raw/`, then:
+### 2) Быстрый демо-прогон (рекомендуется)
 
 ```bash
-python scripts/ingest.py
-python scripts/build_index.py
+python scripts/demo.py --config configs/improved.yaml
+```
+
+Скрипт сам проверит наличие индекса, при необходимости выполнит ingest/index и запустит несколько вопросов.
+
+### 3) Пошаговый запуск
+
+```bash
+python scripts/ingest.py --config configs/baseline.yaml
+python scripts/build_index.py --config configs/baseline.yaml
+python scripts/run_eval.py --config configs/baseline.yaml
+```
+
+Для improved-режима просто замените конфиг на `configs/improved.yaml`.
+
+### 4) API
+
+```bash
 uvicorn src.api:app --reload
 ```
 
-API:
 - `GET /health`
-- `POST /ask` with JSON body: `{"query": "your question"}`
+- `POST /ask` с телом `{"query": "..."}`  
+  (API по умолчанию использует `configs/app.yaml`).
 
-Run offline evaluation:
+## Примеры вопросов
 
-```bash
-python scripts/run_eval.py
-```
+- When must a support ticket be escalated?
+- How long are security audit logs retained?
+- Who handles SEV-1 incidents outside business hours?
+- Under what conditions can an account be suspended?
 
-## Limitations (v1)
+Больше примеров: `examples/sample_queries.md` и `eval/questions.jsonl`.
 
-- Generator is extractive and simple by design.
-- Query rewriting and reranking are placeholder implementations.
-- Verification is lexical-overlap based, not a full fact-checker.
-- Eval quality depends on manual `gold_doc_ids` in `eval/questions.jsonl`.
+## Evaluation
 
-## Next steps
+Скрипт: `scripts/run_eval.py`
 
-- Replace placeholder rewriter/reranker with stronger models.
-- Add optional LLM generation mode with strict citation formatting.
-- Expand evaluation set (30-50 questions) and manual annotation workflow.
-- Add regression tests for retrieval quality and citation coverage.
+Используется локальный eval-набор (`eval/questions.jsonl`) с вопросами и `gold_doc_ids`.
+
+Текущие метрики:
+
+- HitRate@k
+- MRR
+- latency p50/p95
+
+Результаты сохраняются в:
+
+- `eval/results/latest_summary.jsonl`
+- `eval/results/latest_runs.jsonl`
+
+В репозитории нет заранее «нарисованных» результатов: метрики считаются только после локального запуска.
+
+## Ограничения v1
+
+- Генерация ответа сделана в extractive-стиле, без полноценной LLM-генерации.
+- Rewrite/rerank/verifier реализованы легковесно (placeholder-уровень).
+- Корпус и eval-набор маленькие и предназначены для демонстрации.
+- Проект не позиционируется как production-ready.
+
+## Следующие шаги
+
+- Усилить rewriter/reranker без усложнения архитектуры.
+- Добавить более строгую проверку корректности цитат.
+- Расширить eval-набор (больше сложных вопросов и multi-doc кейсов).
+- Добавить несколько регрессионных тестов на retrieval-качество.
 
