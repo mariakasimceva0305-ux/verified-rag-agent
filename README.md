@@ -150,8 +150,6 @@ uvicorn src.api:app --reload
 - `eval/results/latest_summary.jsonl`
 - `eval/results/latest_runs.jsonl`
 
-В репозитории нет заранее «нарисованных» результатов: метрики считаются только после локального запуска.
-
 ## Ограничения v1
 
 - Генерация ответа сделана в extractive-стиле, без полноценной LLM-генерации.
