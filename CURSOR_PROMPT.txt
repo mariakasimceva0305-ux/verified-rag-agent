@@ -1,0 +1,111 @@
+You are working inside a starter repository for a pet project called `verified-rag-agent`.
+
+Goal:
+Build a simple, high-quality, engineering-style NLP / retrieval project:
+a citation-aware RAG system for answering questions over a document corpus, with a baseline and an improved version.
+
+This is NOT a paper reproduction.
+This is NOT a complex multi-agent platform.
+This should be a clean, realistic, working project.
+
+Project idea:
+Create a document QA system that:
+1. ingests a corpus of documents,
+2. chunks them,
+3. builds an embedding index,
+4. retrieves relevant chunks,
+5. optionally rewrites the query,
+6. reranks candidates,
+7. generates an answer with citations,
+8. performs a lightweight verification / groundedness check.
+
+Important constraints:
+1. Keep the project simple and professional.
+2. Do NOT overengineer.
+3. Do NOT add unnecessary frameworks or cloud infrastructure.
+4. Do NOT invent fake metrics or fake benchmark results.
+5. Prefer a clean backend + evaluation + README over fancy features.
+6. Make the repository easy to understand for a recruiter or hiring manager.
+
+What I want you to do first:
+1. Inspect the existing files in this starter folder.
+2. Create a clean project scaffold according to the provided specs.
+3. Create a minimal but professional repository structure.
+4. Generate the initial implementation for:
+   - document ingestion
+   - chunking
+   - embedding retrieval
+   - simple pipeline orchestration
+   - a minimal FastAPI endpoint
+5. Add placeholder modules for:
+   - query rewriting
+   - reranking
+   - verification
+6. Create or update:
+   - `requirements.txt`
+   - `.env.example`
+   - `README.md`
+   - example config files
+   - basic scripts in `scripts/`
+7. Keep everything minimal and readable.
+
+Repository structure to follow:
+- configs/
+- data/raw/
+- data/processed/
+- docs/
+- eval/
+- examples/
+- scripts/
+- src/
+- tests/
+
+Modules to create in `src/`:
+- config.py
+- chunking.py
+- ingest.py
+- retriever.py
+- reranker.py
+- rewriter.py
+- generator.py
+- verifier.py
+- pipeline.py
+- api.py
+- utils.py
+
+Scripts to create:
+- scripts/ingest.py
+- scripts/build_index.py
+- scripts/run_eval.py
+
+Implementation guidance:
+- Use Python.
+- Use a simple vector store (FAISS or Chroma).
+- Use sentence-transformers embeddings or another lightweight, realistic choice.
+- Keep reranking and verification lightweight in v1.
+- Prefer modular code.
+- Add comments only where they help readability.
+- Add basic type hints where reasonable.
+
+README requirements:
+Make README clear and professional.
+It should explain:
+- what the project does
+- why it exists
+- pipeline
+- baseline vs improved version
+- data / corpus
+- evaluation plan
+- how to run
+- limitations
+- next steps
+
+At the end of this first pass, show me:
+1. What files you created
+2. What was implemented now
+3. What remains placeholder-only
+4. What manual decisions I still need to make
+5. A suggested first commit message
+
+Important:
+This first pass should produce a clean baseline project skeleton, not the final perfect system.
