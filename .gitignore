@@ -21,6 +21,8 @@ Thumbs.db
 data/raw/*
 data/processed/*
 !data/raw/.gitkeep
+!data/raw/demo_corpus/
+!data/raw/demo_corpus/*.md
 !data/processed/.gitkeep
 eval/results/*
 !eval/results/.gitkeep
