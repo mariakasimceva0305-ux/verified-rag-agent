@@ -5,6 +5,7 @@ __pycache__/
 *.pyd
 *.so
 .venv/
+.venv-rag/
 venv/
 
 # Env / secrets
