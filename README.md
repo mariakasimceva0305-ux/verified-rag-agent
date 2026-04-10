@@ -66,7 +66,7 @@
 
 ## Результаты
 
-Оценка: `python scripts/run_eval.py` после `ingest` и `build_index` для выбранной конфигурации, набор `eval/questions.jsonl` (16 вопросов). Запуск из корня репозитория с `PYTHONPATH=.` (или эквивалентом). Итоги дублируются в `eval/results/summary_<stem>.json` и построчно в `eval/results/runs_<stem>.jsonl`.
+Оценка: `python scripts/run_eval.py` после `ingest` и `build_index` для выбранной конфигурации, набор `eval/questions.jsonl` (16 вопросов). Запуск из корня репозитория с `PYTHONPATH=.` (или эквивалентом). Для `configs/baseline.yaml` и `configs/improved.yaml` скрипт пишет, в частности, `eval/results/summary_baseline.json`, `eval/results/runs_baseline.jsonl`, `eval/results/summary_improved.json`, `eval/results/runs_improved.jsonl`; при каждом прогоне также обновляются `eval/results/latest_summary.jsonl` и `eval/results/latest_runs.jsonl` (последний запуск).
 
 **Как считается.** Для каждого вопроса строится запрос к индексу; `HitRate@K` — есть ли эталонный документ среди top‑K после ретрива (до переранжирования, чтобы сравнение режимов было по одному правилу). `MRR` — по позиции первого совпадения с эталоном в финальной выдаче. На Windows пути в `gold_doc_ids` могут отличаться от `doc_id` в индексе; скрипт оценки нормализует это через алиасы путей, не меняя `eval/questions.jsonl`. В контуре `improved` дополнительно считается доля ответов, прошедших проверку по чанкам (`grounded_rate`); в `baseline` верификатор выключен, поэтому поле в сводке отсутствует.
 
